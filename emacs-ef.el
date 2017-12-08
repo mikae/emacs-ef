@@ -37,8 +37,8 @@
 Shortcut for:
 (unless variable
   (setq variable value))"
-  `(when (and (boundp ',variable)
-              (null   ,variable))
+  `(unless (and (boundp ',variable)
+                ,variable)
      (setq ,variable ,value)))
 
 (defmacro ef-fset?! (symbol func)

@@ -63,9 +63,9 @@
                  :to-equal "nyan :3")))
 
      (it "Do nothing when variable is not defined"
-       (,name --test-var "nyan-nyan")
+       (,name --test-var "nyan :3")
        (expect --test-var
-               :to-throw))))
+               :to-equal "nyan :3"))))
 
 (defmacro test-fset?! (name)
   `(describe (symbol-name ',name)
