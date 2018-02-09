@@ -1,4 +1,4 @@
-;; emacs-ef.el --- 
+;; emacs-ef.el --- -*- lexical-binding: t -*-
 ;;
 ;; Author: Minae Yui <minae.yui.sain@gmail.com>
 ;; Version: 0.1
@@ -32,33 +32,53 @@
 ;;
 ;;; Code:
 
-(defmacro ef-setq?! (variable value)
-  "Unless VARIABLE is non-nil, then set VALUE to VARIABLE.
-Shortcut for:
-(unless variable
-  (setq variable value))"
-  `(unless (and (boundp ',variable)
-                ,variable)
-     (setq ,variable ,value)))
+;; TODO: find more accurate argument names
+(defmacro ef-prefixied (prefix-first prefix-second &rest forms)
+  ""
+  `(cl-macrolet ((,(intern (format "defun-%s"
+                                   prefix-first))
+                  (name &rest args)
+                  `(defun ,(intern (concat (symbol-name ',prefix-second)
+                                           "-"
+                                           (symbol-name name)))
+                       ,@args))
+                 (,(intern (format "defun-%s-"
+                                   prefix-first))
+                  (name &rest args)
+                  `(defun ,(intern (concat (symbol-name ',prefix-second)
+                                           "--"
+                                           (symbol-name name)))
+                       ,@args))
 
-(defmacro ef-fset?! (symbol func)
-  "Like `ef-setq?!', just for function cells.
-Shortcut for:
-(unless (symbol-function symbol)
-  (fset symbol func))"
-  `(unless (symbol-function ',symbol)
-     (cond
-       ((or (functionp ',func)
-            (macrop ',func))
-         (fset ',symbol (symbol-function ',func)))
-       ((or (functionp ,func)
-            (macrop    ,func))
-         (fset ',symbol ,func)))))
+                 (,(intern (format "defvar-%s"
+                                   prefix-first))
+                  (name &optional value doc)
+                  `(defvar ,(intern (concat (symbol-name ',prefix-second)
+                                            "-"
+                                            (symbol-name name)))
+                     ,value
+                     ,doc))
 
-(defun ef-infect-language ()
-  "Infect language with ef functions."
-  (ef-fset?! setq?! ef-setq?!)
-  (ef-fset?! fset?! ef-fset?!))
+                 (,(intern (format "defvar-%s-"
+                                   prefix-first))
+                  (name &optional value doc)
+                  `(defvar ,(intern (concat (symbol-name ',prefix-second)
+                                            "--"
+                                            (symbol-name name)))
+                     ,value
+                     ,doc))
+
+                 ($? (name)
+                     `(symbol-value (intern (concat (symbol-name ',prefix-second)
+                                                    "-"
+                                                    (symbol-name ',name)))))
+                 ($?- (name)
+                      `(symbol-value (intern (concat (symbol-name ',prefix-second)
+                                                     "--"
+                                                     (symbol-name ',name))))))
+     ,@forms))
+
+(put 'ef-prefixied 'lisp-indent-function 'defun)
 
 (provide 'emacs-ef)
 ;;; emacs-ef.el ends here
