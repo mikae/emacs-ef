@@ -44,15 +44,12 @@
         (+ arg1 arg2))
 
       (defun-a- test (arg1 arg2)
-        (+ arg1 arg2))
-
-      (defvar-a test 1)
-      (defvar-a- test 1))
+        (* arg1 arg2)))
 
     (expect (b-test 1 2)
             :to-be 3)
     (expect (b--test 1 2)
-            :to-be 3))
+            :to-be 2))
 
   (it "defvar-*-/defvar-*-- works"
     (ef-prefixied a b
@@ -73,6 +70,33 @@
               :to-be 1)
       (expect ($?- test)
               :to-be 1)))
+
+  (it "$!/$!- works"
+    (ef-prefixied a b
+      (defvar-a test 1)
+      (defvar-a- test 1)
+      ($! test 2)
+      ($!- test 2)
+
+      (expect ($? test)
+              :to-be 2)
+      (expect ($?- test)
+              :to-be 2)))
+
+  (it "$@/$@- works"
+    (ef-prefixied a b
+      (defun-a test (arg1 arg2)
+        (+ arg1 arg2))
+
+      (defun-a- test (arg1 arg2)
+        (* arg1 arg2))
+
+      (expect ($@ test 1 2)
+              :to-be 3)
+      (expect ($@- test 1 2)
+              :to-be 2))
+
+    )
   )
 
 ;; Local Variables:

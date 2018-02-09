@@ -75,7 +75,30 @@
                  ($?- (name)
                       `(symbol-value (intern (concat ,(symbol-name ',prefix-second)
                                                      "--"
-                                                     (symbol-name ',name))))))
+                                                     (symbol-name ',name)))))
+
+                 ($! (name value)
+                     `(set (intern (concat ,(symbol-name ',prefix-second)
+                                           "-"
+                                           (symbol-name ',name)))
+                           ,value))
+                 ($!- (name value)
+                      `(set (intern (concat ,(symbol-name ',prefix-second)
+                                            "--"
+                                            (symbol-name ',name)))
+                            ,value))
+
+                 ($@ (func &rest args)
+                     `(funcall (symbol-function (intern (concat ,(symbol-name ',prefix-second)
+                                                                "-"
+                                                                (symbol-name ',func))))
+                               ,@args))
+                 ($@- (func &rest args)
+                      `(funcall (symbol-function (intern (concat ,(symbol-name ',prefix-second)
+                                                                 "--"
+                                                                 (symbol-name ',func))))
+                                ,@args))
+                 ())
      ,@forms))
 
 
