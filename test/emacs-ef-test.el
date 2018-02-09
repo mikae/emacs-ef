@@ -38,12 +38,42 @@
 (require 'emacs-ef)
 
 (describe "ef-prefixied"
-  (it "Works"
+  (it "defun-*-/defun-*-- works"
     (ef-prefixied a b
-                  (defun-a test (arg1 arg2)
-                    (+ arg1 arg2)))
+      (defun-a test (arg1 arg2)
+        (+ arg1 arg2))
+
+      (defun-a- test (arg1 arg2)
+        (+ arg1 arg2))
+
+      (defvar-a test 1)
+      (defvar-a- test 1))
+
     (expect (b-test 1 2)
-            :to-be 3)))
+            :to-be 3)
+    (expect (b--test 1 2)
+            :to-be 3))
+
+  (it "defvar-*-/defvar-*-- works"
+    (ef-prefixied a b
+      (defvar-a test 1)
+      (defvar-a- test 1))
+
+    (expect b-test
+            :to-be 1)
+    (expect b--test
+            :to-be 1))
+
+  (it "$?/$?- works"
+    (ef-prefixied a b
+      (defvar-a test 1)
+      (defvar-a- test 1)
+
+      (expect ($? test)
+              :to-be 1)
+      (expect ($?- test)
+              :to-be 1)))
+  )
 
 ;; Local Variables:
 ;; eval: (put 'describe    'lisp-indent-function 'defun)

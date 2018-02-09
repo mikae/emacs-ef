@@ -69,14 +69,15 @@
                      ,doc))
 
                  ($? (name)
-                     `(symbol-value (intern (concat (symbol-name ',prefix-second)
+                     `(symbol-value (intern (concat ,(symbol-name ',prefix-second)
                                                     "-"
                                                     (symbol-name ',name)))))
                  ($?- (name)
-                      `(symbol-value (intern (concat (symbol-name ',prefix-second)
+                      `(symbol-value (intern (concat ,(symbol-name ',prefix-second)
                                                      "--"
                                                      (symbol-name ',name))))))
      ,@forms))
+
 
 (put 'ef-prefixied 'lisp-indent-function 'defun)
 
