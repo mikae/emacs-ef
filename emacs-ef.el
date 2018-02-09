@@ -1,4 +1,4 @@
-;; emacs-ef.el --- -*- lexical-binding: t -*-
+;;; emacs-ef.el --- -*- lexical-binding: t -*-
 ;;
 ;; Author: Minae Yui <minae.yui.sain@gmail.com>
 ;; Version: 0.1
