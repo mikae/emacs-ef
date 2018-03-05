@@ -68,6 +68,23 @@
                      ,value
                      ,doc))
 
+                 (,(intern (format "defconst-%s"
+                                   prefix-first))
+                  (name &optional value doc)
+                  `(defvar ,(intern (concat (symbol-name ',prefix-second)
+                                            "-"
+                                            (symbol-name name)))
+                     ,value
+                     ,doc))
+
+                 (,(intern (format "defconst-%s-"
+                                   prefix-first))
+                  (name &optional value doc)
+                  `(defvar ,(intern (concat (symbol-name ',prefix-second)
+                                            "--"
+                                            (symbol-name name)))
+                     ,value
+                     ,doc))
                  ($? (name)
                      `(symbol-value (intern (concat ,(symbol-name ',prefix-second)
                                                     "-"

@@ -37,103 +37,121 @@
 
 (require 'emacs-ef)
 
-(describe "defun"
-  (it "Works"
-    (ef-prefixied a b
-      (defun-a test (arg1 arg2)
-        (+ arg1 arg2)))
+(describe "ef-prefixied"
+  (describe "defun"
+    (it "Works"
+      (ef-prefixied a b
+        (defun-a test (arg1 arg2)
+          (+ arg1 arg2)))
 
-    (expect (b-test 1 2)
-            :to-be 3)))
+      (expect (b-test 1 2)
+              :to-be 3)))
 
-(describe "defun-"
-  (it "Works"
-    (ef-prefixied a b
-      (defun-a- test (arg1 arg2)
-        (* arg1 arg2)))
-    
-    (expect (b--test 1 2)
-            :to-be 2)))
-
-(describe "defvar"
-  (it "Works"
-    (ef-prefixied a b
-      (defvar-a test 1))
-
-    (expect b-test
-            :to-be 1)))
-
-(describe "defvar-"
-  (it "Works"
-    (ef-prefixied a b 
-      (defvar-a- test 1))
-
-    (expect b--test
-            :to-be 1)))
-
-(describe "$?"
-  (it "Works"
-    (ef-prefixied a b
-      (defvar-a test 1)
-
-      (expect ($? test)
-              :to-be 1)))
-
-  (it "Usable in defun-"
-    (ef-prefixied a b
-      (defvar-a one 1)
+  (describe "defun-"
+    (it "Works"
+      (ef-prefixied a b
+        (defun-a- test (arg1 arg2)
+          (* arg1 arg2)))
       
-      (defun-a inc ()
-        (+ ($? one)
-           1))
+      (expect (b--test 1 2)
+              :to-be 2)))
 
-      (expect (b-inc)
-              :to-be 2))))
-
-(describe "$?-"
-  (it "Works"
-    (ef-prefixied a b
-      (defvar-a- test 1)
-
-      (expect ($?- test)
-              :to-be 1))))
-
-(describe "$!"
-  (it "Works"
-    (ef-prefixied a b
-      (defvar-a test 1)
-      ($! test 2)
+  (describe "defvar"
+    (it "Works"
+      (ef-prefixied a b
+        (defvar-a test 1))
 
       (expect b-test
-              :to-be 2))))
+              :to-be 1)))
 
-(describe "$!-"
-  (it "Works"
-    (ef-prefixied a b
-      (defvar-a- test 1)
-      
-      ($!- test 2)
+  (describe "defvar-"
+    (it "Works"
+      (ef-prefixied a b 
+        (defvar-a- test 1))
 
       (expect b--test
-              :to-be 2))))
+              :to-be 1)))
 
-(describe "$@"
-  (it "Works"
-    (ef-prefixied a b
-      (defun-a test (arg1 arg2)
-        (+ arg1 arg2))
+  (describe "defconst"
+    (it "Works"
+      (ef-prefixied a b
+        (defconst-a test 1))
 
-      (expect ($@ test 1 2)
-              :to-be 3))))
+      (expect b-test
+              :to-be 1)))
 
-(describe "$@-"
-  (it "Works"
-    (ef-prefixied a b
-      (defun-a- test (arg1 arg2)
-        (* arg1 arg2))
+  (describe "defconst-"
+    (it "Works"
+      (ef-prefixied a b 
+        (defconst-a- test 1))
 
-      (expect ($@- test 1 2)
-              :to-be 2))))
+      (expect b--test
+              :to-be 1)))
+
+  (describe "$?"
+    (it "Works"
+      (ef-prefixied a b
+        (defvar-a test 1)
+
+        (expect ($? test)
+                :to-be 1)))
+
+    (it "Usable in defun-"
+      (ef-prefixied a b
+        (defvar-a one 1)
+        
+        (defun-a inc ()
+          (+ ($? one)
+             1))
+
+        (expect (b-inc)
+                :to-be 2))))
+
+  (describe "$?-"
+    (it "Works"
+      (ef-prefixied a b
+        (defvar-a- test 1)
+
+        (expect ($?- test)
+                :to-be 1))))
+
+  (describe "$!"
+    (it "Works"
+      (ef-prefixied a b
+        (defvar-a test 1)
+        ($! test 2)
+
+        (expect b-test
+                :to-be 2))))
+
+  (describe "$!-"
+    (it "Works"
+      (ef-prefixied a b
+        (defvar-a- test 1)
+        
+        ($!- test 2)
+
+        (expect b--test
+                :to-be 2))))
+
+  (describe "$@"
+    (it "Works"
+      (ef-prefixied a b
+        (defun-a test (arg1 arg2)
+          (+ arg1 arg2))
+
+        (expect ($@ test 1 2)
+                :to-be 3))))
+
+  (describe "$@-"
+    (it "Works"
+      (ef-prefixied a b
+        (defun-a- test (arg1 arg2)
+          (* arg1 arg2))
+
+        (expect ($@- test 1 2)
+                :to-be 2))))
+  )
 
 ;; Local Variables:
 ;; eval: (put 'describe    'lisp-indent-function 'defun)
